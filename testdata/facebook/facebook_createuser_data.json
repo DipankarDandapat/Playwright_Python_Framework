@@ -1,0 +1,25 @@
+{
+  "positive": [
+    {
+      "firstname": "admin",
+      "lastname": "admin123",
+      "day":"20",
+      "month": "8",
+      "year": "1990",
+      "mobileNumber": "9876543210",
+      "newPassword": "admin123"
+
+    }
+  ],
+  "negative": [
+    {
+     "firstname": "admin",
+      "lastname": "admin123",
+      "day":"20",
+      "month": "8",
+      "year": "1990",
+      "mobileNumber": "9876543210",
+      "newPassword": "admin123"
+    }
+  ]
+}

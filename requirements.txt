@@ -1,0 +1,7 @@
+playwright==1.42.0
+pytest==8.2.0
+pytest-html==4.1.1
+pytest-rerunfailures==14.0
+python-dotenv==1.0.1
+allure-pytest==2.13.5
+Faker==37.0.0

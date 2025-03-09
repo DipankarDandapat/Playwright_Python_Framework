@@ -1,0 +1,13 @@
+
+For Local
+pytest testscases/facebook/ --cloud local --browser-engine chromium --env dev
+
+For Local clear cache
+pytest testscases/facebook/ -s -v --cache-clear --cloud local --browser-engine chromium --env dev
+
+
+For Browserstack
+pytest testscases/facebook/ -s -v --cache-clear --cloud browserstack  --env dev
+
+For Lambdatest
+pytest testscases/facebook/ -s -v --cache-clear --cloud lambdatest  --env dev
