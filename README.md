@@ -274,7 +274,11 @@ Watch this video to learn how to:
 3. Analyze test results with screenshots and videos.
 4. Debug failed tests efficiently.
 
-[![Playwright Python Framework Demo](reports/videos/demo-thumbnail.png)](reports/demo.mp4)
+[Playwright Python Framework Demo]
+
+https://github.com/user-attachments/assets/1f8c09b2-973b-4fb0-8cf3-74e918157ff7
+
+
 
 ---
 
