@@ -1,6 +1,6 @@
 from playwright.sync_api import Page, expect, Locator
 import logging
-from typing import Dict, Any, List, Union, Optional
+from typing import Optional, Union, List, Dict, Pattern, Any
 import json
 from pathlib import Path
 import re
@@ -115,17 +115,6 @@ class BasePage:
         self.page.screenshot(path=screenshot_path)
         log.info(f"Screenshot saved: {screenshot_path}")
 
-    def verify_text(self, element_key: str, expected_text: str):
-        """Verify that an element contains the expected text."""
-        locator = self._get_locator(element_key)
-        log.info(f"Verifying text in '{element_key}'")
-        expect(locator).to_have_text(expected_text)
-
-    def verify_element_count(self, element_key: str, expected_count: int):
-        """Verify that the number of elements matches the expected count."""
-        locator = self._get_locator(element_key)
-        log.info(f"Verifying count of '{element_key}'")
-        expect(locator).to_have_count(expected_count)
 
     def check_checkbox(self, element_key: str):
         """Check a checkbox or radio button."""
@@ -232,24 +221,135 @@ class BasePage:
         log.info(f"Typing text '{text}' in: '{element_key}'")
         locator.press_sequentially(text, delay=delay)
 
-    def is_checked(self, element_key: str) -> bool:
-        """Check if checkbox/radio is checked."""
+    def verify_element_is_attached(self, element_key: str):
+        """Verify element is attached to the DOM."""
         locator = self._get_locator(element_key)
-        self.wait_for_element_visible(element_key)
-        log.info(f"Checking if '{element_key}' is checked")
-        return locator.is_checked()
+        log.info(f"Verifying element '{element_key}' is attached")
+        expect(locator).to_be_attached()
 
-    def is_visible(self, element_key: str) -> bool:
-        """Check if element is visible."""
+    def verify_checkbox_is_checked(self, element_key: str):
+        """Verify checkbox is checked."""
         locator = self._get_locator(element_key)
-        log.info(f"Checking if '{element_key}' is visible")
-        return locator.is_visible()
+        log.info(f"Verifying checkbox '{element_key}' is checked")
+        expect(locator).to_be_checked()
 
-    def is_enabled(self, element_key: str) -> bool:
-        """Check if element is enabled."""
+    def verify_element_is_disabled(self, element_key: str):
+        """Verify element is disabled."""
         locator = self._get_locator(element_key)
-        log.info(f"Checking if '{element_key}' is enabled")
-        return locator.is_enabled()
+        log.info(f"Verifying element '{element_key}' is disabled")
+        expect(locator).to_be_disabled()
+
+    def verify_element_is_editable(self, element_key: str):
+        """Verify element is editable."""
+        locator = self._get_locator(element_key)
+        log.info(f"Verifying element '{element_key}' is editable")
+        expect(locator).to_be_editable()
+
+    def verify_element_is_empty(self, element_key: str):
+        """Verify element is empty."""
+        locator = self._get_locator(element_key)
+        log.info(f"Verifying element '{element_key}' is empty")
+        expect(locator).to_be_empty()
+
+    def verify_element_is_enabled(self, element_key: str):
+        """Verify element is enabled."""
+        locator = self._get_locator(element_key)
+        log.info(f"Verifying element '{element_key}' is enabled")
+        expect(locator).to_be_enabled()
+
+    def verify_element_is_focused(self, element_key: str):
+        """Verify element is focused."""
+        locator = self._get_locator(element_key)
+        log.info(f"Verifying element '{element_key}' is focused")
+        expect(locator).to_be_focused()
+
+    def verify_element_is_hidden(self, element_key: str):
+        """Verify element is hidden."""
+        locator = self._get_locator(element_key)
+        log.info(f"Verifying element '{element_key}' is hidden")
+        expect(locator).to_be_hidden()
+
+    def verify_element_in_viewport(self, element_key: str):
+        """Verify element is in viewport."""
+        locator = self._get_locator(element_key)
+        log.info(f"Verifying element '{element_key}' is in viewport")
+        expect(locator).to_be_in_viewport()
+
+    def verify_element_is_visible(self, element_key: str):
+        """Verify element is visible."""
+        locator = self._get_locator(element_key)
+        log.info(f"Verifying element '{element_key}' is visible")
+        expect(locator).to_be_visible()
+
+    def verify_element_contains_text(self, element_key: str, text: Union[str, Pattern]):
+        """Verify element contains text."""
+        locator = self._get_locator(element_key)
+        log.info(f"Verifying element '{element_key}' contains text: {text}")
+        expect(locator).to_contain_text(text)
+
+    def verify_element_has_attribute(self, element_key: str, attribute: str, value: Optional[str] = None):
+        """Verify element has attribute with optional value."""
+        locator = self._get_locator(element_key)
+        log.info(f"Verifying element '{element_key}' has attribute '{attribute}'")
+        expect(locator).to_have_attribute(attribute, value)
+
+    def verify_element_has_class(self, element_key: str, class_name: Union[str, Pattern, List[Union[str, Pattern]]]):
+        """Verify element has class name."""
+        locator = self._get_locator(element_key)
+        log.info(f"Verifying element '{element_key}' has class '{class_name}'")
+        expect(locator).to_have_class(class_name)
+
+    def verify_element_count(self, element_key: str, count: int):
+        """Verify element has exact count."""
+        locator = self._get_locator(element_key)
+        log.info(f"Verifying element '{element_key}' count is {count}")
+        expect(locator).to_have_count(count)
+
+    def verify_element_has_css(self, element_key: str, css: Dict[str, str]):
+        """Verify element has CSS properties."""
+        locator = self._get_locator(element_key)
+        log.info(f"Verifying element '{element_key}' has CSS properties: {css}")
+        expect(locator).to_have_css(**css)
+
+    def verify_element_has_id(self, element_key: str, element_id: str):
+        """Verify element has ID."""
+        locator = self._get_locator(element_key)
+        log.info(f"Verifying element '{element_key}' has ID '{element_id}'")
+        expect(locator).to_have_id(element_id)
+
+    def verify_element_has_js_property(self, element_key: str, prop_name: str, value: Any):
+        """Verify element has JavaScript property."""
+        locator = self._get_locator(element_key)
+        log.info(f"Verifying element '{element_key}' has JS property '{prop_name}'")
+        expect(locator).to_have_js_property(prop_name, value)
+
+    def verify_element_has_text(self, element_key: str, text: Union[str, Pattern, List[Union[str, Pattern]]]):
+        """Verify element matches text."""
+        locator = self._get_locator(element_key)
+        log.info(f"Verifying element '{element_key}' has text: {text}")
+        expect(locator).to_have_text(text)
+
+    def verify_element_has_value(self, element_key: str, value: str):
+        """Verify input element has value."""
+        locator = self._get_locator(element_key)
+        log.info(f"Verifying element '{element_key}' has value: {value}")
+        expect(locator).to_have_value(value)
+
+    def verify_element_has_values(self, element_key: str, values: List[str]):
+        """Verify select element has selected values."""
+        locator = self._get_locator(element_key)
+        log.info(f"Verifying element '{element_key}' has selected values: {values}")
+        expect(locator).to_have_values(values)
+
+    def verify_page_title(self, title: Union[str, Pattern]):
+        """Verify page has title."""
+        log.info(f"Verifying page title is: {title}")
+        expect(self.page).to_have_title(title)
+
+    def verify_page_url(self, url: Union[str, Pattern]):
+        """Verify page has URL."""
+        log.info(f"Verifying page URL is: {url}")
+        expect(self.page).to_have_url(url)
 
     def filter_by_text(self, element_key: str, text: Union[str, re.Pattern], strict: bool = True) -> Locator:
         """Filter elements by text content."""
@@ -292,17 +392,6 @@ class BasePage:
         log.info(f"Clicking {index}th element: '{element_key}'")
         locator.click()
 
-    def click_first_element(self, element_key: str):
-        """Click first matching element."""
-        locator = self._get_locator(element_key).first
-        log.info(f"Clicking first element: '{element_key}'")
-        locator.click()
-
-    def click_last_element(self, element_key: str):
-        """Click last matching element."""
-        locator = self._get_locator(element_key).last
-        log.info(f"Clicking last element: '{element_key}'")
-        locator.click()
 
     def get_element_count(self, element_key: str) -> int:
         """Get count of matching elements."""
@@ -310,11 +399,6 @@ class BasePage:
         log.info(f"Getting count of elements: '{element_key}'")
         return locator.count()
 
-    def assert_list_count(self, list_key: str, expected_count: int):
-        """Assert list has exact number of items."""
-        locator = self._get_locator(list_key)
-        log.info(f"Asserting list '{list_key}' has {expected_count} items")
-        expect(locator).to_have_count(expected_count)
 
     def assert_list_contains_texts(self, list_key: str, expected_texts: List[str]):
         """Assert list contains exactly the specified texts."""
