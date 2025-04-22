@@ -112,6 +112,10 @@ project-root/
      ```bash
      pytest testscases/facebook/ --cloud local --browser-engine chromium --env dev
      ```
+   - headless Off mode:
+     ```bash
+     pytest testscases/facebook/ --cloud local --browser-engine chromium --headless false --env dev
+     ```
    - BrowserStack:
      ```bash
      pytest testscases/facebook/ -s -v --cache-clear --cloud browserstack  --env prod
@@ -339,4 +343,4 @@ For questions or feedback, please reach out to:
 
 - **Dipankar Dandapat**  
 - **Email**: d.dandapat96@gmail.com  
-- **GitHub**: [your-username](https://github.com/DipankarDandapat)
+- **GitHub**: [DipankarDandapat](https://github.com/DipankarDandapat)
