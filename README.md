@@ -343,4 +343,4 @@ For questions or feedback, please reach out to:
 
 - **Dipankar Dandapat**  
 - **Email**: d.dandapat96@gmail.com  
-- **GitHub**: [DipankarDandapat](https://github.com/DipankarDandapat)
+- **GitHub**: [Dipankar Dandapat](https://github.com/DipankarDandapat)
