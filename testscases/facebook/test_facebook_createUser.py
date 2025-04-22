@@ -3,6 +3,7 @@ import pytest
 from faker import Faker
 from utils.file_reader import read_file
 
+
 testcasedata = read_file("facebook",'facebook_createuser_data.json')
 fake = Faker()
 

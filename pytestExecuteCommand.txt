@@ -5,6 +5,8 @@ pytest testscases/facebook/ --cloud local --browser-engine chromium --env dev
 For Local clear cache
 pytest testscases/facebook/ -s -v --cache-clear --cloud local --browser-engine chromium --env dev
 
+--headless Off mode:
+pytest testscases/facebook/ --cloud local --browser-engine chromium --headless false --env dev
 
 For Browserstack
 pytest testscases/facebook/ -s -v --cache-clear --cloud browserstack  --env dev

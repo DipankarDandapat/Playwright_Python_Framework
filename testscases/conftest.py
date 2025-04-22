@@ -1,23 +1,27 @@
+
 import json
-import urllib
+import pathlib
+import base64
+import uuid
 
 import pytest
 import os
 from playwright.sync_api import Playwright, Browser
-
-import pytest
-import os
-from playwright.sync_api import Playwright, Browser
+from pytest_metadata.plugin import metadata_key
 
 from utils.logger import customLogger
 from config.browser_capabilities import get_browser_capabilities  # Updated import
 from config.config import Config
-
+from datetime import datetime
 log = customLogger()
 
 # Import fixtures from the fixtures module
 pytest_plugins = ["fixtures.pages"]
 
+def pytest_configure(config):
+    # Register additional metadata or initialize variables here if needed
+    global pytest_html
+    pytest_html = config.pluginmanager.getplugin("html")
 
 # Define command-line options
 def pytest_addoption(parser):
@@ -37,9 +41,10 @@ def pytest_addoption(parser):
     )
     parser.addoption(
         "--headless",
-        action="store_true",
+        action="store",
+        type=lambda x: str(x).lower() == 'true',
         default=True,
-        help="Run in headless mode"
+        help="Run in headless mode: true|false"
     )
     parser.addoption(
         "--env",
@@ -113,8 +118,7 @@ def page(browser: Browser, request,app_config):
     # context = browser.new_context(no_viewport=True)
     page = context.new_page()
     yield page
-    context.close()  # Close the context after the test
-
+    context.close()
 
 
 def pytest_runtest_setup(item):
@@ -122,3 +126,66 @@ def pytest_runtest_setup(item):
 
 def pytest_runtest_teardown(item):
     log.info(f"Testcase.....{item.name}.....End now ............................................................")
+
+@pytest.hookimpl(optionalhook=True)
+def pytest_metadata(metadata):
+    metadata.pop("Platform", None)
+    metadata.pop("Packages", None)
+    metadata.pop("Plugins", None)
+    metadata.pop("JAVA_HOME", None)
+    metadata.pop("Base URL", None)
+
+
+
+
+enve: str = None
+def pytest_configure(config):
+    global enve
+    enve=config.getoption('--env')
+    # Add custom metadata to the report
+    config.stash[metadata_key]["Report ID"] = str(uuid.uuid4())[:8]
+    config.stash[metadata_key]["Project Name"] = "Playwright Python Automation"
+    config.stash[metadata_key]["Version"] = "1.0.0"
+    config.stash[metadata_key]["Environment"] = enve
+    config.stash[metadata_key]["Execution Time"] = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    config.stash[metadata_key]["Author"] = "Dipankar"
+
+def pytest_html_report_title(report):
+    report.title = "Playwright Python Automation HTML Report"
+
+
+@pytest.hookimpl(hookwrapper=True)
+def pytest_runtest_makereport(item, call):
+    pytest_html = item.config.pluginmanager.getplugin('html')
+    outcome = yield
+    report = outcome.get_result()
+    extra = getattr(report, 'extra', [])
+
+    if report.when in ('call', 'setup'):
+        xfail = hasattr(report, 'wasxfail')
+        if (report.skipped and xfail) or (report.failed and not xfail):
+            page = item.funcargs.get("page", None)
+            if page:
+                try:
+                    # Project-level screenshots folder
+                    project_root = pathlib.Path().resolve()
+                    screenshots_dir = project_root / "screenshots"
+                    screenshots_dir.mkdir(parents=True, exist_ok=True)
+
+                    file_name = report.nodeid.replace("::", "_").replace("/", "_") + ".png"
+                    screenshot_path = screenshots_dir / file_name
+
+                    page.screenshot(path=str(screenshot_path), full_page=True)
+
+                    with open(screenshot_path, "rb") as f:
+                        encoded_image = base64.b64encode(f.read()).decode("utf-8")
+                        html = (
+                            f'<div><img src="data:image/png;base64,{encoded_image}" '
+                            f'style="width:400px;height:auto;" '
+                            f'onclick="window.open(this.src)" align="right"/></div>'
+                        )
+                        extra.append(pytest_html.extras.html(html))
+                except Exception as e:
+                    print(f"Screenshot capture failed: {e}")
+
+        report.extras = extra

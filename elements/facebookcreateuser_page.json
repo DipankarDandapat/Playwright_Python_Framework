@@ -1,0 +1,50 @@
+{
+    "createUserbutton": {
+        "type": "testid",
+        "value": "open-registration-form-button"
+    },
+
+    "firstname": {
+        "type": "role",
+        "role": "textbox",
+        "value": "First name"
+    },
+    "lastname": {
+        "type": "role",
+        "role": "textbox",
+        "value": "Surname"
+    },
+     "female": {
+        "type": "role",
+        "role": "radio",
+        "value": "Female"
+    },
+    "day": {
+        "type": "label",
+        "value": "Day"
+    },
+    "month": {
+        "type": "label",
+        "value": "Month"
+    },
+    "year": {
+        "type": "label",
+        "value": "Year"
+    },
+
+     "mobile": {
+        "type": "role",
+        "role": "textbox",
+        "value": "Mobile number or email address"
+    },
+    "Newpassword": "//input[@id='password_step_input']",
+
+    "signUpButton": {
+        "type": "role",
+        "role": "button",
+        "value": "Sign Up"
+    }
+
+
+
+}
