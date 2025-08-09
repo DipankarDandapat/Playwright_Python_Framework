@@ -9,6 +9,7 @@ import os
 from playwright.sync_api import Playwright, Browser
 from pytest_metadata.plugin import metadata_key
 
+from utils.db.db_factory import DBFactory
 from utils.logger import customLogger
 from config.browser_capabilities import get_browser_capabilities  # Updated import
 from config.config import Config
@@ -189,3 +190,16 @@ def pytest_runtest_makereport(item, call):
                     print(f"Screenshot capture failed: {e}")
 
         report.extras = extra
+
+
+
+
+def pytest_sessionfinish(session, exitstatus):
+
+    # # Clean up postgresql DB
+    # postgresql_db = DBFactory.get_db("postgresql")
+    # postgresql_db.clean_test_data("partner_consent", "user_id='56177907'")
+
+    # Clean up postgresql DB
+    cosmos_db = DBFactory.get_db("cosmos")
+    cosmos_db.clean_test_data("add your container name", "email='d@gmail.com'")

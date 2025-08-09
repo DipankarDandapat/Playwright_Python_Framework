@@ -1,10 +1,8 @@
 from playwright.sync_api import Page, expect, Locator
-import logging
 from typing import Optional, Union, List, Dict, Pattern, Any
 import json
 from pathlib import Path
 import re
-
 from utils.logger import customLogger
 
 log = customLogger()

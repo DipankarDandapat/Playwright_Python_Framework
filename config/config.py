@@ -8,6 +8,24 @@ class Config:
         self.env = env
         self._load_environment()
 
+        # Database configurations
+        self.COSMOS_DB_HOST = os.getenv("COSMOS_DB_HOST")
+        self.COSMOS_DB_KEY = os.getenv("COSMOS_DB_KEY")
+        self.COSMOS_DB_NAME = os.getenv("COSMOS_DB_NAME")
+        self.COSMOS_DB_CONTAINER = os.getenv("COSMOS_DB_CONTAINER")
+
+        self.MYSQL_HOST = os.getenv("MYSQL_HOST")
+        self.MYSQL_PORT = int(os.getenv("MYSQL_PORT", 3306))
+        self.MYSQL_DB = os.getenv("MYSQL_DB")
+        self.MYSQL_USER = os.getenv("MYSQL_USER")
+        self.MYSQL_PASSWORD = os.getenv("MYSQL_PASSWORD")
+
+        self.POSTGRES_HOST = os.getenv("POSTGRES_HOST")
+        self.POSTGRES_PORT = int(os.getenv("POSTGRES_PORT", 5432))
+        self.POSTGRES_DB = os.getenv("POSTGRES_DB")
+        self.POSTGRES_USER = os.getenv("POSTGRES_USER")
+        self.POSTGRES_PASSWORD = os.getenv("POSTGRES_PASSWORD")
+
     def _load_environment(self):
         """Load environment variables from the correct .env file."""
         env_file = Path(__file__).parent / "environments" / f".env.{self.env}"
