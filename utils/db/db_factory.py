@@ -9,7 +9,6 @@ class DBFactory:
     @staticmethod
     def get_db(db_type: str):
         """Factory method to get database instance"""
-        config = Config(os.getenv("ENV", "dev"))
 
         if db_type.lower() == "cosmos":
             return CosmosDB()

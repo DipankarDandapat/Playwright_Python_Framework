@@ -26,6 +26,8 @@ class Config:
         self.POSTGRES_USER = os.getenv("POSTGRES_USER")
         self.POSTGRES_PASSWORD = os.getenv("POSTGRES_PASSWORD")
 
+        self.DBUSE = os.getenv("DBUSE")
+
     def _load_environment(self):
         """Load environment variables from the correct .env file."""
         env_file = Path(__file__).parent / "environments" / f".env.{self.env}"

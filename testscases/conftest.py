@@ -195,11 +195,12 @@ def pytest_runtest_makereport(item, call):
 
 
 def pytest_sessionfinish(session, exitstatus):
+    config = Config(os.getenv("ENV", "dev"))
 
     # # Clean up postgresql DB
     # postgresql_db = DBFactory.get_db("postgresql")
     # postgresql_db.clean_test_data("partner_consent", "user_id='56177907'")
 
     # Clean up postgresql DB
-    cosmos_db = DBFactory.get_db("cosmos")
-    cosmos_db.clean_test_data("add your container name", "email='d@gmail.com'")
+    cosmos_db = DBFactory.get_db(config.DBUSE)
+    cosmos_db.clean_test_data(config.COSMOS_DB_CONTAINER, "email='d@gmail.com'")
