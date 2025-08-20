@@ -1,23 +1,20 @@
 import mysql.connector
 from mysql.connector import Error
 from .base_db import BaseDB
-from config.config import Config
 import os
 from typing import List, Dict, Union
 from utils.logger import customLogger
-
 log = customLogger()
 
 
 class MySQLDB(BaseDB):
     def __init__(self):
-        config = Config(os.getenv("ENV", "dev"))
         self.connection = mysql.connector.connect(
-            host=config.MYSQL_HOST,
-            database=config.MYSQL_DB,
-            user=config.MYSQL_USER,
-            password=config.MYSQL_PASSWORD,
-            port=config.MYSQL_PORT
+            host=os.getenv("MYSQL_HOST"),
+            database=os.getenv("MYSQL_DB"),
+            user=os.getenv("MYSQL_USER"),
+            password=os.getenv("MYSQL_PASSWORD"),
+            port=os.getenv("MYSQL_PORT"),
         )
         self.cursor = self.connection.cursor(dictionary=True)
 

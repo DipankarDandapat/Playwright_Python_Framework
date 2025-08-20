@@ -1,0 +1,30 @@
+20_08_2025 01:12:21 PM -(conftest.py:320)- [INFO] Testcase.....test_valid_login[case0].....Start now ..........................................................
+20_08_2025 01:12:22 PM -(base_page.py:29)- [INFO] Loaded elements from: C:\Users\Dipankar\PycharmProjects\Playwright_Python_Framework\elements\facebooklogin_page.json
+20_08_2025 01:12:24 PM -(base_page.py:74)- [INFO] Waiting for element 'email' to be visible
+20_08_2025 01:12:24 PM -(base_page.py:95)- [INFO] Entering text 'admin' in 'email'
+20_08_2025 01:12:24 PM -(base_page.py:74)- [INFO] Waiting for element 'password' to be visible
+20_08_2025 01:12:24 PM -(base_page.py:95)- [INFO] Entering text 'admin123' in 'password'
+20_08_2025 01:12:24 PM -(base_page.py:74)- [INFO] Waiting for element 'loginButton' to be visible
+20_08_2025 01:12:24 PM -(base_page.py:80)- [INFO] Waiting for element 'loginButton' to be clickable
+20_08_2025 01:12:24 PM -(base_page.py:88)- [INFO] Clicking on 'loginButton'
+20_08_2025 01:12:30 PM -(conftest.py:324)- [INFO] Testcase.....test_valid_login[case0].....End now ............................................................
+20_08_2025 01:12:36 PM -(conftest.py:320)- [INFO] Testcase.....test_Invalid_login[case0].....Start now ..........................................................
+20_08_2025 01:12:36 PM -(base_page.py:29)- [INFO] Loaded elements from: C:\Users\Dipankar\PycharmProjects\Playwright_Python_Framework\elements\facebooklogin_page.json
+20_08_2025 01:12:38 PM -(base_page.py:74)- [INFO] Waiting for element 'email' to be visible
+20_08_2025 01:12:38 PM -(base_page.py:95)- [INFO] Entering text 'stephanie18@example.com' in 'email'
+20_08_2025 01:12:38 PM -(base_page.py:74)- [INFO] Waiting for element 'password' to be visible
+20_08_2025 01:12:38 PM -(base_page.py:95)- [INFO] Entering text 'w*m)5ATL+9' in 'password'
+20_08_2025 01:12:38 PM -(base_page.py:74)- [INFO] Waiting for element 'loginButton' to be visible
+20_08_2025 01:12:38 PM -(base_page.py:80)- [INFO] Waiting for element 'loginButton' to be clickable
+20_08_2025 01:12:38 PM -(base_page.py:88)- [INFO] Clicking on 'loginButton'
+20_08_2025 01:12:47 PM -(conftest.py:324)- [INFO] Testcase.....test_Invalid_login[case0].....End now ............................................................
+20_08_2025 01:12:47 PM -(conftest.py:320)- [INFO] Testcase.....test_Invalid_login[case1].....Start now ..........................................................
+20_08_2025 01:12:48 PM -(base_page.py:29)- [INFO] Loaded elements from: C:\Users\Dipankar\PycharmProjects\Playwright_Python_Framework\elements\facebooklogin_page.json
+20_08_2025 01:12:49 PM -(base_page.py:74)- [INFO] Waiting for element 'email' to be visible
+20_08_2025 01:12:49 PM -(base_page.py:95)- [INFO] Entering text 'douglas08@example.org' in 'email'
+20_08_2025 01:12:49 PM -(base_page.py:74)- [INFO] Waiting for element 'password' to be visible
+20_08_2025 01:12:49 PM -(base_page.py:95)- [INFO] Entering text 'Kqt0GU7vD+' in 'password'
+20_08_2025 01:12:49 PM -(base_page.py:74)- [INFO] Waiting for element 'loginButton' to be visible
+20_08_2025 01:12:49 PM -(base_page.py:80)- [INFO] Waiting for element 'loginButton' to be clickable
+20_08_2025 01:12:49 PM -(base_page.py:88)- [INFO] Clicking on 'loginButton'
+20_08_2025 01:12:57 PM -(conftest.py:324)- [INFO] Testcase.....test_Invalid_login[case1].....End now ............................................................

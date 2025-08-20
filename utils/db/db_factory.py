@@ -1,7 +1,6 @@
 from .cosmos_db import CosmosDB
 from .mysql_db import MySQLDB
 from .postgresql_db import PostgreSQLDB
-from config.config import Config
 import os
 
 

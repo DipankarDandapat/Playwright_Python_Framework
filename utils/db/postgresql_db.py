@@ -1,22 +1,19 @@
 import psycopg2
 from .base_db import BaseDB
-from config.config import Config
 import os
 from utils.logger import customLogger
-from psycopg2.sql import Composed
 
 log = customLogger()
 
 
 class PostgreSQLDB(BaseDB):
     def __init__(self):
-        config = Config(os.getenv("ENV", "dev"))
         self.connection = psycopg2.connect(
-            host=config.POSTGRES_HOST,
-            database=config.POSTGRES_DB,
-            user=config.POSTGRES_USER,
-            password=config.POSTGRES_PASSWORD,
-            port=config.POSTGRES_PORT
+            host=os.getenv("POSTGRES_HOST"),
+            database=os.getenv("POSTGRES_DB"),
+            user=os.getenv("POSTGRES_USER"),
+            password=os.getenv("POSTGRES_PASSWORD"),
+            port=os.getenv("POSTGRES_PORT")
 
         )
 
@@ -45,8 +42,11 @@ class PostgreSQLDB(BaseDB):
 
             query = f"DELETE FROM {table_name} WHERE {where_clause}"
 
-            deleted_count = self.execute_non_query(query)
-            log.info(f"Deleted {deleted_count} row(s) from {table_name} where {where_clause}")
+            print(query)
+            print("@###@@@@@@@@@@@###################@@@@@@@@@@@@@@@@@@@")
+
+            # deleted_count = self.execute_non_query(query)
+            # log.info(f"Deleted {deleted_count} row(s) from {table_name} where {where_clause}")
 
         except Exception as e:
             log.error(f"Error deleting record from {table_name}: {e}")

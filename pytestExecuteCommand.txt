@@ -13,3 +13,213 @@ pytest testscases/facebook/ -s -v --cache-clear --cloud browserstack  --env dev
 
 For Lambdatest
 pytest testscases/facebook/ -s -v --cache-clear --cloud lambdatest  --env dev
+
+
+pytest testscases/facebook/ --cloud local --browser-engine chromium --headless false --env dev -s -v
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# import json
+# import pathlib
+# import base64
+# import uuid
+# import pytest
+# import os
+# from playwright.sync_api import Playwright, Browser
+# from pytest_metadata.plugin import metadata_key
+# from dotenv import load_dotenv
+# from pathlib import Path
+# from utils.logger import customLogger
+# from config.browser_capabilities import get_browser_capabilities
+#
+# from datetime import datetime
+# log = customLogger()
+#
+# # Import fixtures from the fixtures module
+# pytest_plugins = ["fixtures.pages"]
+#
+#
+# # Define command-line options
+# def pytest_addoption(parser):
+#     parser.addoption(
+#         "--cloud",
+#         action="store",
+#         choices=["local", "browserstack", "lambdatest"],
+#         default="local",
+#         help="Cloud provider: local|browserstack|lambdatest"
+#     )
+#     parser.addoption(
+#         "--browser-engine",
+#         action="store",
+#         default="chromium",
+#         choices=["chromium", "firefox", "webkit"],
+#         help="Browser engine: chromium|firefox|webkit"
+#     )
+#     parser.addoption(
+#         "--headless",
+#         action="store",
+#         type=lambda x: str(x).lower() == 'true',
+#         default=True,
+#         help="Run in headless mode: true|false"
+#     )
+#     parser.addoption(
+#         "--env",
+#         action="store",
+#         default="dev",
+#         choices=["dev", "qa", "prod"],
+#         help="Environment: dev|qa|prod"
+#     )
+#     parser.addoption(
+#         "--retries",
+#         action="store",
+#         default=1,
+#         type=int,
+#         help="Number of times to retry failed tests after session"
+#     )
+#
+#
+# @pytest.fixture(scope="session", autouse=True)
+# def load_env(request):
+#
+#     env = request.config.getoption("--env").lower()
+#     project_root = Path(__file__).parent.parent
+#     env_file = project_root /"config"/"environments"/ f".env.{env}"
+#
+#     if not env_file.exists():
+#         pytest.exit(f"Environment file not found: {env_file}")
+#
+#     load_dotenv(env_file, override=True)   # override=True to be safe
+#
+#     # Optional: expose the env name itself if you need it
+#     os.environ["ENV"] = env
+#     print(os.environ["ENV"])
+#
+#
+# # Browser fixture
+# @pytest.fixture(scope="session")
+# def browser(request, playwright: Playwright):
+#     global ws_endpoint
+#     cloud = request.config.getoption("--cloud")
+#     browser_name = request.config.getoption("--browser-engine")
+#     headless = request.config.getoption("--headless")
+#
+#     if cloud == "local":
+#         # Get capabilities for local browser
+#         test_name = request.node.name
+#         caps = get_browser_capabilities(cloud, test_name)
+#         browser = playwright[browser_name].launch(headless=headless)
+#         yield browser
+#         browser.close()
+#     else:
+#         # Cloud provider setup
+#         test_name = request.node.name
+#         caps = get_browser_capabilities(cloud, test_name)
+#
+#         if cloud == "browserstack":
+#             ws_endpoint = f"wss://cdp.browserstack.com/playwright?caps={json.dumps(caps)}"
+#
+#         elif cloud == "lambdatest":
+#             ws_endpoint = f"wss://cdp.lambdatest.com/playwright?capabilities={caps}"
+#
+#         # Connect to cloud browser
+#         print(f"WebSocket Endpoint: {ws_endpoint}")
+#         browser = playwright.chromium.connect(ws_endpoint)
+#         yield browser
+#         browser.close()
+#
+#
+#
+# # Page fixture
+# @pytest.fixture(scope="function")
+# def page(browser: Browser, request):
+#     # Get capabilities for the current provider
+#     cloud = request.config.getoption("--cloud")
+#     test_name = request.node.name
+#     caps = get_browser_capabilities(cloud, test_name)
+#     context = browser.new_context(viewport=caps["viewport"])
+#     # context = browser.new_context(no_viewport=True)
+#     page = context.new_page()
+#     yield page
+#     context.close()
+#
+# @pytest.hookimpl(tryfirst=True)
+# def pytest_runtest_setup(item):
+#     log.info(f"Testcase.....{item.name}.....Start now ..........................................................")
+#
+# def pytest_runtest_teardown(item):
+#     log.info(f"Testcase.....{item.name}.....End now ............................................................")
+#
+# @pytest.hookimpl(optionalhook=True)
+# def pytest_metadata(metadata):
+#     metadata.pop("Platform", None)
+#     metadata.pop("Packages", None)
+#     metadata.pop("Plugins", None)
+#     metadata.pop("JAVA_HOME", None)
+#     metadata.pop("Base URL", None)
+#
+#
+#
+#
+# def pytest_configure(config):
+#     pytest_html = config.pluginmanager.getplugin("html")
+#
+#     # Add custom metadata to the report
+#     config.stash[metadata_key]["Report ID"] = str(uuid.uuid4())[:8]
+#     config.stash[metadata_key]["Project Name"] = "Playwright Python Automation"
+#     config.stash[metadata_key]["Version"] = "1.0.0"
+#     # config.stash[metadata_key]["Environment"] = os.environ["ENV"]
+#     config.stash[metadata_key]["Execution Time"] = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+#     config.stash[metadata_key]["Author"] = "Dipankar"
+#
+# def pytest_html_report_title(report):
+#     report.title = "Playwright Python Automation HTML Report"
+#
+#
+#
+# @pytest.hookimpl(hookwrapper=True)
+# def pytest_runtest_makereport(item, call):
+#
+#     pytest_html = item.config.pluginmanager.getplugin('html')
+#     outcome = yield
+#     report = outcome.get_result()
+#     extra = getattr(report, 'extra', [])
+#
+#     if report.when in ('call', 'setup'):
+#         xfail = hasattr(report, 'wasxfail')
+#         if (report.skipped and xfail) or (report.failed and not xfail):
+#             page = item.funcargs.get("page", None)
+#             if page:
+#                 try:
+#                     # Project-level screenshots folder
+#                     project_root = pathlib.Path().resolve()
+#                     screenshots_dir = project_root / "screenshots"
+#                     screenshots_dir.mkdir(parents=True, exist_ok=True)
+#
+#                     file_name = report.nodeid.replace("::", "_").replace("/", "_") + ".png"
+#                     screenshot_path = screenshots_dir / file_name
+#
+#                     page.screenshot(path=str(screenshot_path), full_page=True)
+#
+#                     with open(screenshot_path, "rb") as f:
+#                         encoded_image = base64.b64encode(f.read()).decode("utf-8")
+#                         html = (
+#                             f'<div><img src="data:image/png;base64,{encoded_image}" '
+#                             f'style="width:400px;height:auto;" '
+#                             f'onclick="window.open(this.src)" align="right"/></div>'
+#                         )
+#                         extra.append(pytest_html.extras.html(html))
+#                 except Exception as e:
+#                     print(f"Screenshot capture failed: {e}")
+#
+#         report.extras = extra
